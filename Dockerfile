@@ -96,5 +96,5 @@ LABEL org.label-schema.name="${DOCKERHUB_USERNAME}/vsc-master:${ROS_DISTRO}-${AR
       org.label-schema.docker.cmd="docker run -d ros2cuisine/vsc-master"
 
 # Instructions to a child image build
-ONBUILD RUN rm /etc/apt/apt.conf.d/01proxy \
+ONBUILD RUN rm -f /etc/apt/apt.conf.d/01proxy \
     && rm -rf /var/lib/apt/lists/*
