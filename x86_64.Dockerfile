@@ -1,8 +1,8 @@
 # setup environment variables (ARG for settings can be changed at buildtime with --build-arg <varname>=<value>
 ARG ROS_DISTRO=eloquent
-ARG ARCH=arm64v8
 
-FROM ${ARCH}/ros:${ROS_DISTRO}-ros-base
+
+FROM ros:${ROS_DISTRO}-ros-base
 
 ARG DOCKERHUB_USERNAME=ros2cuisine
 ARG DOCKERHUB_HOST=https://hub.docker.com
@@ -24,12 +24,12 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && apt-get install -y -q \
         sudo \
         # Robot
-        ros-$ROS_DISTRO-urdf \
-        ros-$ROS_DISTRO-robot-state-publisher \
+        ros-${ROS_DISTRO}-urdf \
+        ros-${ROS_DISTRO}-robot-state-publisher \
         # Messages
-        ros-$ROS_DISTRO-gazebo-msgs \
+        ros-${ROS_DISTRO}-gazebo-msgs \
         # Moved from Dev Setup for faster tests
-        ros-$ROS_DISTRO-desktop \
+        ros-${ROS_DISTRO}-desktop \
         gazebo9 \
         nano \
         # Doxygen Requirments
@@ -96,5 +96,4 @@ LABEL org.label-schema.name="${DOCKERHUB_USERNAME}/vsc-master:${ROS_DISTRO}-${AR
       org.label-schema.docker.cmd="docker run -d ros2cuisine/vsc-master"
 
 # Instructions to a child image build
-ONBUILD RUN rm -f /etc/apt/apt.conf.d/01proxy \
-    && rm -rf /var/lib/apt/lists/*
+ONBUILD RUN rm -rf /var/lib/apt/lists/*
