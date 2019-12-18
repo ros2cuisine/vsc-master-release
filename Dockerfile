@@ -10,12 +10,7 @@ ARG USER_GID=$USER_UID
 ENV NEWBUILD 0
 ENV DEBIAN_FRONTEND noninteractive
 
-
-#Set up the apt-cacher-proxy
-RUN echo 'Acquire::HTTP::Proxy "http://172.17.0.1:3142";' >> /etc/apt/apt.conf.d/01proxy \
-    && echo 'Acquire::HTTPS::Proxy "false";' >> /etc/apt/apt.conf.d/01proxy \
-    # Create the user
-    && groupadd --gid $USER_GID $USERNAME \
+RUN groupadd --gid $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
     && mkdir -p /home/$USERNAME/.vscode-server /home/$USERNAME/.vscode-server-insiders \
     && chown ${USER_UID}:${USER_GID} /home/$USERNAME/.vscode-server* \
