@@ -1,6 +1,6 @@
 # setup environment variables (ARG for settings can be changed at buildtime with --build-arg <varname>=<value>
 ARG ROS_DISTRO=eloquent
-ARG ARCH=arm64v8
+ARG ARCH=arm32v7
 FROM ${ARCH}/ros:${ROS_DISTRO}-ros-base
 ARG DOCKERHUB_USERNAME=ros2cuisine
 ARG DOCKERHUB_HOST=https://hub.docker.com
@@ -93,5 +93,5 @@ LABEL org.label-schema.name="${DOCKERHUB_USERNAME}/vsc-master:${ROS_DISTRO}-${AR
       org.label-schema.docker.cmd="docker run -d ros2cuisine/vsc-master"
 
 # Instructions to a child image build
-ONBUILD RUN rm /etc/apt/apt.conf.d/01proxy \
+ONBUILD RUN rm -rf /etc/apt/apt.conf.d/01proxy \
     && rm -rf /var/lib/apt/lists/*
