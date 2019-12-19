@@ -1,6 +1,11 @@
 # setup environment variables (ARG for settings can be changed at buildtime with --build-arg <varname>=<value>
 ARG ROS_DISTRO=eloquent
+<<<<<<< HEAD:x86_64.Dockerfile
 ARG ARCH=x86_64
+=======
+
+
+>>>>>>> development:x86_64.Dockerfile
 FROM ros:${ROS_DISTRO}-ros-base
 
 ARG DOCKERHUB_USERNAME=ros2cuisine
@@ -27,6 +32,7 @@ RUN groupadd --gid $USER_GID $USERNAME \
         ros-${ROS_DISTRO}-robot-state-publisher \
         # Messages
         ros-${ROS_DISTRO}-gazebo-msgs \
+        # Moved from Dev Setup for faster tests
         ros-${ROS_DISTRO}-desktop \
         gazebo9 \
         nano \
@@ -44,6 +50,11 @@ RUN groupadd --gid $USER_GID $USERNAME \
         python3-apt \
         # Installing Docker Compose
         docker-compose \
+        # Key Handling
+        wget \
+        curl \
+        gnupg2 \
+        lsb-release \
     # Configure sudo
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME \
