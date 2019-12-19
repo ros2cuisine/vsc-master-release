@@ -1,11 +1,7 @@
 # setup environment variables (ARG for settings can be changed at buildtime with --build-arg <varname>=<value>
 ARG ROS_DISTRO=eloquent
-<<<<<<< HEAD:x86_64.Dockerfile
 ARG ARCH=x86_64
-=======
 
-
->>>>>>> development:x86_64.Dockerfile
 FROM ros:${ROS_DISTRO}-ros-base
 
 ARG DOCKERHUB_USERNAME=ros2cuisine
