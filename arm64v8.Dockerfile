@@ -44,6 +44,11 @@ RUN groupadd --gid $USER_GID $USERNAME \
         python3-apt \
         # Installing Docker Compose
         docker-compose \
+        # Key Handling
+        wget \
+        curl \
+        gnupg2 \
+        lsb-release \
     # Configure sudo
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME \
