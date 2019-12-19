@@ -58,6 +58,12 @@ RUN groupadd --gid $USER_GID $USERNAME \
     # Configure sudo
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME \
+    # Install keys
+    && curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add - \
+    && wget http://packages.osrfoundation.org/gazebo.key \
+    && apt-key add gazebo.key \
+    && apt-get update -q \
+    && apt-get upgrade -y -q \
     # Install Python3 Packages
     && pip3 install -U \
         # Lint
