@@ -1,11 +1,3 @@
-# Setup qemu
-FROM alpine AS qemu
-
-#QEMU Download
-ENV QEMU_URL https://github.com/balena-io/qemu/releases/download/v3.0.0%2Bresin/qemu-3.0.0+resin-arm.tar.gz
-
-RUN apk add curl && curl -L ${QEMU_URL} | tar zxvf - -C . --strip-components 1
-
 # setup environment variables (ARG for settings can be changed at buildtime with --build-arg <varname>=<value>
 ARG TARGET_ARCH=armhf
 ARG FLAVOR=builder
@@ -16,6 +8,14 @@ ARG USERNAME=cuisine
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 ARG TAG=latest
+
+# Setup qemu
+FROM alpine AS qemu
+
+#QEMU Download
+ENV QEMU_URL https://github.com/balena-io/qemu/releases/download/v3.0.0%2Bresin/qemu-3.0.0+resin-arm.tar.gz
+
+RUN apk add curl && curl -L ${QEMU_URL} | tar zxvf - -C . --strip-components 1
 
 FROM ${DOCKERHUB_USERNAME}/${FLAVOR}:${FLAVOR_VERSION}-${TARGET_ARCH}-${TAG}
 
