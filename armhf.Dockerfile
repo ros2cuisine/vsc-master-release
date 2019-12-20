@@ -1,16 +1,24 @@
 # setup environment variables (ARG for settings can be changed at buildtime with --build-arg <varname>=<value>
-ARG TARGET_ARCH=amd64
-ARG FLAVOR=ros
+ARG TARGET_ARCH=armhf
+ARG FLAVOR=builder
 ARG FLAVOR_VERSION=eloquent
-
-FROM ${TARGET_ARCH}/${FLAVOR}:${FLAVOR_VERSION}-ros-base
-
 ARG DOCKERHUB_USERNAME=ros2cuisine
 ARG DOCKERHUB_HOST=https://hub.docker.com
 ARG USERNAME=cuisine
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
+ARG TAG=latest
 
+FROM alpine AS qemu
+
+#QEMU Download
+ENV QEMU_URL https://github.com/balena-io/qemu/releases/download/v3.0.0%2Bresin/qemu-3.0.0+resin-arm.tar.gz
+
+RUN apk add curl && curl -L ${QEMU_URL} | tar zxvf - -C . --strip-components 1
+
+FROM ${DOCKERHUB_USERNAME}}/${FLAVOR}}:${FLAVOR_VERSION}-${TARGET_ARCH}-${TAG}
+
+COPY --from=qemu qemu-arm-static /usr/bin
 
 ENV NEWBUILD 0
 ENV DEBIAN_FRONTEND noninteractive
@@ -25,12 +33,12 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && apt-get install -y -q \
         sudo \
         # Robot
-        ros-${ROS_DISTRO}-urdf \
-        ros-${ROS_DISTRO}-robot-state-publisher \
+        ros-$ROS_DISTRO-urdf \
+        ros-$ROS_DISTRO-robot-state-publisher \
         # Messages
-        ros-${ROS_DISTRO}-gazebo-msgs \
+        ros-$ROS_DISTRO-gazebo-msgs \
         # Moved from Dev Setup for faster tests
-        ros-${ROS_DISTRO}-desktop \
+        ros-$ROS_DISTRO-desktop \
         gazebo9 \
         nano \
         # Doxygen Requirments
@@ -52,15 +60,13 @@ RUN groupadd --gid $USER_GID $USERNAME \
         curl \
         gnupg2 \
         lsb-release \
+        # Install Doxygen
+        doxygen \
+        # Lint
+        exuberant-ctags \
     # Configure sudo
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME \
-    # Install keys
-    && curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add - \
-    && wget http://packages.osrfoundation.org/gazebo.key \
-    && apt-key add gazebo.key \
-    && apt-get update -q \
-    && apt-get upgrade -y -q \
     # Install Python3 Packages
     && pip3 install -U \
         # Lint
@@ -76,17 +82,10 @@ RUN groupadd --gid $USER_GID $USERNAME \
         colcon-ros-bundle \
         faas-cli \
     && rm -rf /var/lib/apt/lists/* \
-    # Install Doxygen
-    && git clone https://github.com/doxygen/doxygen.git \
-    && cd doxygen \
-    && mkdir build \
-    && cd build \
-    && cmake -G "Unix Makefiles" .. \
-    && make \
-    && make install \
-    && cd .. \
-    && cd .. \
-    && rm -r doxygen
+    # Prepare docker config folder
+    && mkdir -p ~/.docker
+
+COPY eloquent-docker.config.json ~/.docker/config.json
 
 # Setting User
 # USER $USERNAME
@@ -108,4 +107,5 @@ LABEL org.label-schema.name="${DOCKERHUB_USERNAME}/vsc-master:${ROS_DISTRO}-${AR
       org.label-schema.docker.cmd="docker run -d ros2cuisine/vsc-master"
 
 # Instructions to a child image build
-ONBUILD RUN rm -rf /var/lib/apt/lists/*
+ONBUILD RUN rm -rf /etc/apt/apt.conf.d/01proxy \
+    && rm -rf /var/lib/apt/lists/*
