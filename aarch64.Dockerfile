@@ -4,9 +4,6 @@ ARG FLAVOR=builder
 ARG FLAVOR_VERSION=eloquent
 ARG DOCKERHUB_USERNAME=ros2cuisine
 ARG DOCKERHUB_HOST=https://hub.docker.com
-ARG USERNAME=cuisine
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
 ARG TAG=latest
 
 # Setup qemu
@@ -24,10 +21,10 @@ COPY --from=qemu qemu-aarch64-static /usr/bin
 ENV NEWBUILD 0
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN groupadd --gid $USER_GID $USERNAME \
-    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
-    && mkdir -p /home/$USERNAME/.vscode-server /home/$USERNAME/.vscode-server-insiders \
-    && chown ${USER_UID}:${USER_GID} /home/$USERNAME/.vscode-server* \
+RUN groupadd --gid 1000 cuisine \
+    && useradd --uid 1000 --gid 1000 -m cuisine \
+    && mkdir -p /home/cuisine/.vscode-server /home/cuisine/.vscode-server-insiders \
+    && chown 1000:1000 /home/cuisine/.vscode-server* \
     # Update Packages
     && apt-get update \
     && apt-get upgrade -y -q \
@@ -66,8 +63,8 @@ RUN groupadd --gid $USER_GID $USERNAME \
         # Lint
         exuberant-ctags\
     # Configure sudo
-    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-    && chmod 0440 /etc/sudoers.d/$USERNAME \
+    && echo cuisine ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/cuisine \
+    && chmod 0440 /etc/sudoers.d/cuisine \
     # Install Python3 Packages
     && pip3 install -U \
         # Lint
@@ -87,7 +84,7 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && mkdir -p ~/.docker
 
 # Setting User
-# USER $USERNAME
+# USER cuisine
 
 COPY eloquent-docker.config.json ~/.docker/config.json
 
