@@ -1,16 +1,15 @@
 # setup environment variables (ARG for settings can be changed at buildtime with --build-arg <varname>=<value>
 ARG TARGET_ARCH=amd64
-ARG FLAVOR=ros
+ARG FLAVOR=builder
 ARG FLAVOR_VERSION=eloquent
-
-FROM ${TARGET_ARCH}/${FLAVOR}:${FLAVOR_VERSION}-ros-base
-
 ARG DOCKERHUB_USERNAME=ros2cuisine
 ARG DOCKERHUB_HOST=https://hub.docker.com
 ARG USERNAME=cuisine
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
+ARG TAG=latest
 
+FROM ${DOCKERHUB_USERNAME}}/${FLAVOR}}:${FLAVOR_VERSION}-${TARGET_ARCH}-${TAG}
 
 ENV NEWBUILD 0
 ENV DEBIAN_FRONTEND noninteractive
@@ -47,11 +46,17 @@ RUN groupadd --gid $USER_GID $USERNAME \
         python3-apt \
         # Installing Docker Compose
         docker-compose \
+        # git
+        git-all \
         # Key Handling
         wget \
         curl \
         gnupg2 \
         lsb-release \
+        # Install Doxygen
+        doxygen \
+        # Lint
+        exuberant-ctags \
     # Configure sudo
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME \
@@ -76,17 +81,10 @@ RUN groupadd --gid $USER_GID $USERNAME \
         colcon-ros-bundle \
         faas-cli \
     && rm -rf /var/lib/apt/lists/* \
-    # Install Doxygen
-    && git clone https://github.com/doxygen/doxygen.git \
-    && cd doxygen \
-    && mkdir build \
-    && cd build \
-    && cmake -G "Unix Makefiles" .. \
-    && make \
-    && make install \
-    && cd .. \
-    && cd .. \
-    && rm -r doxygen
+    # Preparing the docker config folder
+    && mkdir -p ~/.docker
+
+COPY eloquent-docker.config.json ~/.docker/config.json
 
 # Setting User
 # USER $USERNAME

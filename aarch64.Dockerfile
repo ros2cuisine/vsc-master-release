@@ -1,15 +1,25 @@
+# Setup qemu
+FROM alpine AS qemu
+
+#QEMU download
+ENV QEMU_URL https://github.com/balena-io/qemu/releases/download/v3.0.0%2Bresin/qemu-3.0.0+resin-aarch64.tar.gz
+
+RUN apk add curl && curl -L ${QEMU_URL} | tar zxvf - -C . --strip-components 1
+
 # setup environment variables (ARG for settings can be changed at buildtime with --build-arg <varname>=<value>
-ARG TARGET_ARCH=arm32v7
-ARG FLAVOR=ros
+ARG TARGET_ARCH=arm64
+ARG FLAVOR=builder
 ARG FLAVOR_VERSION=eloquent
-
-FROM ${TARGET_ARCH}/${FLAVOR}:${FLAVOR_VERSION}-ros-base
-
 ARG DOCKERHUB_USERNAME=ros2cuisine
 ARG DOCKERHUB_HOST=https://hub.docker.com
 ARG USERNAME=cuisine
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
+ARG TAG=latest
+
+FROM ${DOCKERHUB_USERNAME}}/${FLAVOR}}:${FLAVOR_VERSION}-${TARGET_ARCH}-${TAG}
+
+COPY --from=qemu qemu-aarch64-static /usr/bin
 
 ENV NEWBUILD 0
 ENV DEBIAN_FRONTEND noninteractive
@@ -51,6 +61,10 @@ RUN groupadd --gid $USER_GID $USERNAME \
         curl \
         gnupg2 \
         lsb-release \
+        # Install Doxygen
+        doxygen \
+        # Lint
+        exuberant-ctags\
     # Configure sudo
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME \
@@ -69,20 +83,13 @@ RUN groupadd --gid $USER_GID $USERNAME \
         colcon-ros-bundle \
         faas-cli \
     && rm -rf /var/lib/apt/lists/* \
-    # Install Doxygen
-    && git clone https://github.com/doxygen/doxygen.git \
-    && cd doxygen \
-    && mkdir build \
-    && cd build \
-    && cmake -G "Unix Makefiles" .. \
-    && make \
-    && make install \
-    && cd .. \
-    && cd .. \
-    && rm -r doxygen
+    # Prepare docker config folder
+    && mkdir -p ~/.docker
 
 # Setting User
 # USER $USERNAME
+
+COPY eloquent-docker.config.json ~/.docker/config.json
 
 ENTRYPOINT [ "ros2_ws/install/ros_entrypoint.sh" ]
 # Setup CMD
