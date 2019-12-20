@@ -28,6 +28,8 @@ RUN groupadd --gid 1000 cuisine \
     # Update Packages
     && apt-get update \
     && apt-get upgrade -y -q \
+    && echo ${TAG} \
+    && echo $TAG \
     && apt-get install -y -q \
         sudo \
         # Robot

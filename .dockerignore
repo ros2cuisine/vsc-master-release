@@ -1,2 +1,3 @@
 *
 # Ignore Everything
+!eloquent-docker.config.json
