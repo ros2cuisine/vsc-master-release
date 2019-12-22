@@ -61,8 +61,6 @@ RUN groupadd --gid 1000 cuisine \
         lsb-release \
         # Install Doxygen
         doxygen \
-        # Lint
-        exuberant-cBUILD_tags \
     # Configure sudo
     && echo cuisine ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/cuisine \
     && chmod 0440 /etc/sudoers.d/cuisine \
