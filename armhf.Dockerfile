@@ -84,7 +84,7 @@ RUN groupadd --gid 1000 cuisine \
     # Prepare docker config folder
     && mkdir -p ~/.docker
 
-ADD https://raw.githubusercontent.com/ros2cuisine/vsc-master/master/eloquent-docker.config.json ~/.docker/config.json
+ADD https://raw.githubusercontent.com/ros2cuisine/vsc-master-release/master/eloquent-docker.config.json ~/.docker/config.json
 
 # Setting User
 # USER $USERNAME
