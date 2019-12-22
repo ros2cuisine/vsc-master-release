@@ -11,7 +11,11 @@ FROM ${DOCKERHUB_USERNAME}/${BUILD_REPO}:${FLAVOR_VERSION}-${TARGET_ARCH}-${BUIL
 ENV ROS_DISTRO eloquent
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN groupadd --gid 1000 cuisine \
+ADD https://github.com/estesp/manifest-tool/releases/download/v1.0.0/manifest-tool-linux-amd64 /bin/manifest-tool
+
+RUN chmod +x /bin/manifest-tool \
+    # Setting User
+    && groupadd --gid 1000 cuisine \
     && useradd --uid 1000 --gid 1000 -m cuisine \
     && mkdir -p /home/cuisine/.vscode-server /home/cuisine/.vscode-server-insiders \
     && chown 1000:1000 /home/cuisine/.vscode-server* \

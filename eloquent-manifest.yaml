@@ -1,17 +1,17 @@
-image: ros2cuisine/vsc-master:latest
+image: ros2cuisine/vsc-master:eloquent-latest
 manifests:
-  - image: ros2cuisine/vsc-master:eloquent-amd-64-latest
+  - image: ros2cuisine/vsc-master:eloquent-amd64-latest
     platform:
       architecture: amd64
       os: linux
 
-  - image: ros2cuisine/vsc-master:eloquent-arm64-latest
+  - image: ros2cuisine/vsc-master:eloquent-arm64v8-latest
     platform:
       architecture: arm64
       os: linux
       variant: v8
 
-  - image: ros2cuisine/vsc-master:eloquent-arm-latest
+  - image: ros2cuisine/vsc-master:eloquent-arm32v7-latest
     platform:
       architecture: arm
       os: linux

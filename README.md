@@ -15,4 +15,4 @@ FROM ros2cuisine/vsc-master:latest
 ```
 
 followed by your custom instructions
-have a look at [Cuisine](https://gitlab.com/ros2cuisine/cuisine.git) as an example usage
+have a look at [Cuisine](https://gitlab.com/ros2cuisine/cuisine.git) as an example 

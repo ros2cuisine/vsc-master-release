@@ -20,7 +20,11 @@ COPY --from=qemu qemu-aarch64-static /usr/bin
 ENV NEWBUILD 0
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN groupadd --gid 1000 cuisine \
+ADD https://github.com/estesp/manifest-tool/releases/download/v1.0.0/manifest-tool-linux-arm64 /bin/manifest-tool
+
+RUN chmod +x /bin/manifest-tool \
+    # Add cuisine user
+    && groupadd --gid 1000 cuisine \
     && useradd --uid 1000 --gid 1000 -m cuisine \
     && mkdir -p /home/cuisine/.vscode-server /home/cuisine/.vscode-server-insiders \
     && chown 1000:1000 /home/cuisine/.vscode-server* \
@@ -85,9 +89,11 @@ RUN groupadd --gid 1000 cuisine \
     && mkdir -p ~/.docker
 
 # Setting User
-# USER cuisine
+USER cuisine
+
 ADD https://raw.githubusercontent.com/ros2cuisine/vsc-master-release/master/eloquent-docker.config.json ~/.docker/config.json
 
 ENTRYPOINT [ "/ros_entrypoint.sh" ]
+
 # Setup CMD
 CMD ["bash" "-c" "/ros_entrypoint.sh"]
