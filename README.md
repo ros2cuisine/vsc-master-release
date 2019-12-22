@@ -5,6 +5,7 @@
 ```bash
 docker pull ros2cuisine/vsc-master:latest
 ```
+
 ## Working with the image
 
 Create a .devcontainer folder in your project and add a Dockerfile containing the line

@@ -3,16 +3,16 @@ ARG TARGET_ARCH=amd64
 ARG FLAVOR_VERSION=eloquent
 ARG DOCKERHUB_USERNAME=ros2cuisine
 ARG DOCKERHUB_HOST=https://hub.docker.com
-ARG TAG=latest
+ARG BUILD_TAG=staged
 ARG BUILD_REPO=builder
 
-FROM ${DOCKERHUB_USERNAME}/${BUILD_REPO}:${FLAVOR_VERSION}-${TARGET_ARCH}-${TAG} as build
+FROM ${DOCKERHUB_USERNAME}/${BUILD_REPO}:${FLAVOR_VERSION}-${TARGET_ARCH}-${BUILD_TAG} as build
 
 ENV ROS_DISTRO eloquent
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN groupadd --gid 1000 cuisine \
-    && useradd --uid USER_UID --gid 1000 -m cuisine \
+    && useradd --uid 1000 --gid 1000 -m cuisine \
     && mkdir -p /home/cuisine/.vscode-server /home/cuisine/.vscode-server-insiders \
     && chown 1000:1000 /home/cuisine/.vscode-server* \
     # Update Packages

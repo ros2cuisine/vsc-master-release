@@ -3,7 +3,7 @@ ARG BUILD_ARCH=arm64v8
 ARG FLAVOR_VERSION=eloquent
 ARG DOCKERHUB_USERNAME=ros2cuisine
 ARG DOCKERHUB_HOST=https://hub.docker.com
-ARG TAG=latest
+ARG BUILD_TAG=staged
 ARG BUILD_REPO=builder
 # Setup qemu
 FROM alpine AS qemu
@@ -13,7 +13,7 @@ ENV QEMU_URL https://github.com/balena-io/qemu/releases/download/v3.0.0%2Bresin/
 
 RUN apk add curl && curl -L ${QEMU_URL} | tar zxvf - -C . --strip-components 1
 
-FROM ${DOCKERHUB_USERNAME}/${BUILD_REPO}:${FLAVOR_VERSION}-${BUILD_ARCH}-${TAG}
+FROM ${DOCKERHUB_USERNAME}/${BUILD_REPO}:${FLAVOR_VERSION}-${BUILD_ARCH}-${BUILD_TAG}
 
 COPY --from=qemu qemu-aarch64-static /usr/bin
 

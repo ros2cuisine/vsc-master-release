@@ -2,8 +2,8 @@
 ARG BUILD_ARCH=arm32v7
 ARG FLAVOR_VERSION=eloquent
 ARG DOCKERHUB_USERNAME=ros2cuisine
-ARG DOCKERHUB_HOST=https://hub.docker.com
-ARG TAG=latest
+ARG DOCKERHUB_HOST="https://hub.docker.com"
+ARG BUILD_TAG=staged
 ARG BUILD_REPO=builder
 # Setup qemu
 FROM alpine AS qemu
@@ -13,7 +13,7 @@ ENV QEMU_URL https://github.com/balena-io/qemu/releases/download/v3.0.0%2Bresin/
 
 RUN apk add curl && curl -L ${QEMU_URL} | tar zxvf - -C . --strip-components 1
 
-FROM ${DOCKERHUB_USERNAME}/${BUILD_REPO}:${FLAVOR_VERSION}-${BUILD_ARCH}-${TAG}
+FROM ${DOCKERHUB_USERNAME}/${BUILD_REPO}:${FLAVOR_VERSION}-${BUILD_ARCH}-${BUILD_TAG}
 
 COPY --from=qemu qemu-arm-static /usr/bin
 
@@ -27,8 +27,8 @@ RUN groupadd --gid 1000 cuisine \
     # Update Packages
     && apt-get update \
     && apt-get upgrade -y -q \
-    && echo ${TAG} \
-    && echo $TAG \
+    && echo ${BUILD_TAG} \
+    && echo $BUILD_TAG \
     && apt-get install -y -q \
         sudo \
         # Robot
@@ -62,7 +62,7 @@ RUN groupadd --gid 1000 cuisine \
         # Install Doxygen
         doxygen \
         # Lint
-        exuberant-ctags \
+        exuberant-cBUILD_tags \
     # Configure sudo
     && echo cuisine ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/cuisine \
     && chmod 0440 /etc/sudoers.d/cuisine \
