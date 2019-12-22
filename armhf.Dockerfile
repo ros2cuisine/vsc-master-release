@@ -1,11 +1,10 @@
 # setup environment variables (ARG for settings can be changed at buildtime with --build-arg <varname>=<value>
 ARG TARGET_ARCH=armhf
-ARG FLAVOR=builder
 ARG FLAVOR_VERSION=eloquent
 ARG DOCKERHUB_USERNAME=ros2cuisine
 ARG DOCKERHUB_HOST=https://hub.docker.com
 ARG TAG=latest
-
+ARG BUILD_REPO=builder
 # Setup qemu
 FROM alpine AS qemu
 
@@ -14,7 +13,7 @@ ENV QEMU_URL https://github.com/balena-io/qemu/releases/download/v3.0.0%2Bresin/
 
 RUN apk add curl && curl -L ${QEMU_URL} | tar zxvf - -C . --strip-components 1
 
-FROM ${DOCKERHUB_USERNAME}/${FLAVOR}:${FLAVOR_VERSION}-${TARGET_ARCH}-${TAG}
+FROM ${DOCKERHUB_USERNAME}/${BUILD_REPO}:${FLAVOR_VERSION}-${TARGET_ARCH}-${TAG}
 
 COPY --from=qemu qemu-arm-static /usr/bin
 

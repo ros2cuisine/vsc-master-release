@@ -1,10 +1,10 @@
 # setup environment variables (ARG for settings can be changed at buildtime with --build-arg <varname>=<value>
 ARG TARGET_ARCH=amd64
-ARG FLAVOR=builder
 ARG FLAVOR_VERSION=eloquent
 ARG DOCKERHUB_USERNAME=ros2cuisine
 ARG DOCKERHUB_HOST=https://hub.docker.com
 ARG TAG=latest
+ARG BUILD_REPO=builder
 
 FROM ${DOCKERHUB_USERNAME}/${BUILD_REPO}:${FLAVOR_VERSION}-${TARGET_ARCH}-${TAG} as build
 
