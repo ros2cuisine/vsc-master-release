@@ -87,25 +87,8 @@ RUN groupadd --gid 1000 cuisine \
 
 # Setting User
 # USER cuisine
+ADD https://raw.githubusercontent.com/ros2cuisine/vsc-master/master/eloquent-docker.config.json ~/.docker/config.json
 
-COPY eloquent-docker.config.json ~/.docker/config.json
-
-ENTRYPOINT [ "ros2_ws/install/ros_entrypoint.sh" ]
+ENTRYPOINT [ "/ros_entrypoint.sh" ]
 # Setup CMD
-CMD ["bash" "-c" "/opt/ros/$ROS_DISTRO/setup.bash"]
-
-LABEL org.label-schema.name="${DOCKERHUB_USERNAME}/vsc-master:${ROS_DISTRO}-${ARCH}" \
-      org.label-schema.description="The Minimal build image for cuisine Docker images" \
-      org.label-schema.build-date=$BUILD_DATE \
-      org.label-schema.vcs-url="${DOCKERHUB_HOST}/${DOCKERHUB_USERNAME}/vsc-master" \
-      org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.schema-version="1.0.0-rc1" \
-      org.label-schema.maintainer="cuisine-dev@ichbestimmtnicht.de" \
-      org.label-schema.url="https://github.com/${DOCKERHUB_USERNAME}/vsc-master-release/" \
-      org.label-schema.vendor="ichbestimmtnicht" \
-      org.label-schema.version=$BUILD_VERSION \
-      org.label-schema.docker.cmd="docker run -d ros2cuisine/vsc-master"
-
-# Instructions to a child image build
-ONBUILD RUN rm -rf /etc/apt/apt.conf.d/01proxy \
-    && rm -rf /var/lib/apt/lists/*
+CMD ["bash" "-c" "/ros_entrypoint.sh"]

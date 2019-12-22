@@ -1,10 +1,30 @@
 #!/bin/bash
 
+BUILD_ARCH=$(echo "${DOCKERFILE_PATH}" | rev | cut -d '.' -f 2 | rev)
+
 docker build \
+    --compress \
+    --pull \
+    --label description="The Developmentimage for ROS2 Cuisine" \
+    --label docker.cmd="docker run -d ros2cuisine/vsc-master" \
+    --label maintainer="cuisine@ichbestimmtnicht.de" \
+    --label vendor="ichbestimmtnicht" \
+    --label vcs-url="https://gitlab.com/ros2cuisine/bundler" \
+    --label url="https://gitlab.com/ros2cuisine/bundler" \
+    --label name="${IMAGE_NAME}" \
+    --label version="${BUILD_VERSION}"\
+    --label build-date="${BUILD_DATE}" \
+    --label vcs-ref="${VCS_REF}" \
+    --label schema-version="1.0.0-rc1" \
     --file "${DOCKERFILE_PATH}" \
     --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
     --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
+    --build-arg ROS_DISTRO=eloquent \
+    --build-arg DOCKER_REPO="${DOCKER_REPO}" \
+    --build-arg DOCKERHUB_NAME=ros2cuisine \
+    --build-arg ROS_DISTRO=eloquent \
+    --build-arg BUILD_REPO=builder \
+    --build-arg BUILD_VERSION=bionic \
+    --build-arg BUILD_ARCH=$(echo "${DOCKER_TAG}" | cut -d '-' -f 2 | rev | cut -d '-' -f 2 | rev) \
     --tag "${IMAGE_NAME}" \
     .
-
-BUILD_ARCH=$(echo "${DOCKERFILE_PATH}" | rev | cut -d '.' -f 2 | rev)

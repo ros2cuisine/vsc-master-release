@@ -6,9 +6,9 @@ ARG DOCKERHUB_USERNAME=ros2cuisine
 ARG DOCKERHUB_HOST=https://hub.docker.com
 ARG TAG=latest
 
-FROM ${DOCKERHUB_USERNAME}/${FLAVOR}:${FLAVOR_VERSION}-${TARGET_ARCH}-${TAG}
+FROM ${DOCKERHUB_USERNAME}/${BUILD_REPO}:${FLAVOR_VERSION}-${TARGET_ARCH}-${TAG} as build
 
-ENV NEWBUILD 0
+ENV ROS_DISTRO eloquent
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN groupadd --gid 1000 cuisine \
@@ -83,26 +83,15 @@ RUN groupadd --gid 1000 cuisine \
     # Preparing the docker config folder
     && mkdir -p ~/.docker
 
-COPY eloquent-docker.config.json ~/.docker/config.json
+ADD https://raw.githubusercontent.com/ros2cuisine/vsc-master/master/eloquent-docker.config.json ~/.docker/config.json
 
 # Setting User
 # USER cuisine
 
 ENTRYPOINT [ "ros2_ws/install/ros_entrypoint.sh" ]
-# Setup CMD
-CMD ["bash" "-c" "/opt/ros/$ROS_DISTRO/setup.bash"]
 
-LABEL org.label-schema.name="${DOCKERHUB_USERNAME}/vsc-master:${ROS_DISTRO}-${ARCH}" \
-      org.label-schema.description="The Minimal build image for cuisine Docker images" \
-      org.label-schema.build-date=$BUILD_DATE \
-      org.label-schema.vcs-url="${DOCKERHUB_HOST}/${DOCKERHUB_USERNAME}/vsc-master" \
-      org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.schema-version="1.0.0-rc1" \
-      org.label-schema.maintainer="cuisine-dev@ichbestimmtnicht.de" \
-      org.label-schema.url="https://github.com/${DOCKERHUB_USERNAME}/vsc-master-release/" \
-      org.label-schema.vendor="ichbestimmtnicht" \
-      org.label-schema.version=$BUILD_VERSION \
-      org.label-schema.docker.cmd="docker run -d ros2cuisine/vsc-master"
+# Setup CMD
+CMD ["bash" "-c" "/opt/ros/${ROS_DISTRO}/setup.bash"]
 
 # Instructions to a child image build
-ONBUILD RUN rm -rf /var/lib/apt/lists/*
+#ONBUILD RUN rm -rf /var/lib/apt/lists/*
