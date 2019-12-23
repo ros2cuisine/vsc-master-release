@@ -91,7 +91,7 @@ RUN chmod +x /bin/manifest-tool \
 # Setting User
 USER cuisine
 
-ADD https://raw.githubusercontent.com/ros2cuisine/vsc-master-release/master/eloquent-docker.config.json ~/.docker/config.json
+#ADD https://raw.githubusercontent.com/ros2cuisine/vsc-master-release/master/eloquent-docker.config.json ~/.docker/config.json
 
 ENTRYPOINT [ "/ros_entrypoint.sh" ]
 

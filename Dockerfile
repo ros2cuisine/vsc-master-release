@@ -87,7 +87,7 @@ RUN chmod +x /bin/manifest-tool \
     # Preparing the docker config folder
     && mkdir -p ~/.docker
 
-ADD https://raw.githubusercontent.com/ros2cuisine/vsc-master-release/master/eloquent-docker.config.json ~/.docker/config.json
+#ADD https://raw.githubusercontent.com/ros2cuisine/vsc-master-release/master/eloquent-docker.config.json ~/.docker/config.json
 
 # Setting User
 # USER cuisine
