@@ -1,14 +1,15 @@
 # setup environment variables (ARG for settings can be changed at buildtime with --build-arg <varname>=<value>
-ARG TARGET_ARCH=amd64
-ARG FLAVOR_VERSION=eloquent
-ARG DOCKERHUB_USERNAME=ros2cuisine
-ARG DOCKERHUB_HOST=https://hub.docker.com
-ARG BUILD_TAG=staged
-ARG BUILD_REPO=builder
+ARG ROS_DISTRO
+ARG SRC_NAME
+ARG SRC_REPO
+ARG SRC_TAG
 
-FROM ${DOCKERHUB_USERNAME}/${BUILD_REPO}:${FLAVOR_VERSION}-${TARGET_ARCH}-${BUILD_TAG} as build
+# Pull the image
+FROM ${SRC_NAME}/${SRC_REPO}:${SRC_TAG} as bundle
 
-ENV ROS_DISTRO eloquent
+ARG ROS_DISTRO
+
+ENV ROS_DISTRO ${ROS_DISTRO}
 ENV DEBIAN_FRONTEND noninteractive
 
 ADD https://github.com/estesp/manifest-tool/releases/download/v1.0.0/manifest-tool-linux-amd64 /bin/manifest-tool
@@ -90,7 +91,7 @@ RUN chmod +x /bin/manifest-tool \
 #ADD https://raw.githubusercontent.com/ros2cuisine/vsc-master-release/master/eloquent-docker.config.json ~/.docker/config.json
 
 # Setting User
-# USER cuisine
+USER cuisine
 
 ENTRYPOINT [ "ros2_ws/install/ros_entrypoint.sh" ]
 

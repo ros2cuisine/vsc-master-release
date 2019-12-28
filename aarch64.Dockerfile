@@ -1,10 +1,9 @@
-# setup environment variables (ARG for settings can be changed at buildtime with --build-arg <varname>=<value>
-ARG BUILD_ARCH=arm64v8
-ARG FLAVOR_VERSION=eloquent
-ARG DOCKERHUB_USERNAME=ros2cuisine
-ARG DOCKERHUB_HOST=https://hub.docker.com
-ARG BUILD_TAG=staged
-ARG BUILD_REPO=builder
+# Set environment variables
+ARG ROS_DISTRO
+ARG SRC_NAME
+ARG SRC_REPO
+ARG SRC_TAG
+
 # Setup qemu
 FROM alpine AS qemu
 
@@ -13,11 +12,19 @@ ENV QEMU_URL https://github.com/balena-io/qemu/releases/download/v3.0.0%2Bresin/
 
 RUN apk add curl && curl -L ${QEMU_URL} | tar zxvf - -C . --strip-components 1
 
-FROM ${DOCKERHUB_USERNAME}/${BUILD_REPO}:${FLAVOR_VERSION}-${BUILD_ARCH}-${BUILD_TAG}
+ARG SRC_NAME
+ARG SRC_REPO
+ARG SRC_TAG
+
+# Pull the image
+FROM ${SRC_NAME}/${SRC_REPO}:${SRC_TAG} as bundle
 
 COPY --from=qemu qemu-aarch64-static /usr/bin
 
-ENV NEWBUILD 0
+ARG ROS_DISTRO
+
+# These are avaivable in the build image
+ENV ROS_DISTRO ${ROS_DISTRO}
 ENV DEBIAN_FRONTEND noninteractive
 
 ADD https://github.com/estesp/manifest-tool/releases/download/v1.0.0/manifest-tool-linux-arm64 /bin/manifest-tool
@@ -31,8 +38,6 @@ RUN chmod +x /bin/manifest-tool \
     # Update Packages
     && apt-get update \
     && apt-get upgrade -y -q \
-    && echo ${TAG} \
-    && echo $TAG \
     && apt-get install -y -q \
         sudo \
         # Robot
