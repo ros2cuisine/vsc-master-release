@@ -1,9 +1,11 @@
-# Dummy Dockerfile because hooks aren't working with a custom Filename
-# Have a look into the hooks folder to see them per arch
-# https://gitlab.com/ros2cuisine/templates/vsc-master/tree/master/hooks/
+# setup environment variables (ARG for settings can be changed at buildtime with --build-arg <varname>=<value>
+ARG ROS_DISTRO
+ARG SRC_NAME
+ARG SRC_REPO
+ARG SRC_TAG
 
 # Pull the image
-FROM ros2cuisine/builder as bundle
+FROM ${SRC_NAME}/${SRC_REPO}:${SRC_TAG} as bundle
 
 ARG ROS_DISTRO
 

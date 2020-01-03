@@ -20,7 +20,7 @@ echo "DEBUG: Begin Cycle ${DEST_BUILD_ARCH}"
     # Set AMD64
     if [ ${DEST_BUILD_ARCH} == "amd64" ]; then
         DEST_ARCH=${DEST_BUILD_ARCH}
-        DOCKER_PREFIX=""
+        DOCKERFile="hooks/amd64.Dockerfile"
         echo "  - image: ${DOCKER_REPO}:${DOCKER_TAG}-${DEST_BUILD_ARCH}" >> auto-docker-manifest.yaml
         echo "    platform:" >> auto-docker-manifest.yaml
         echo "      architecture: ${DEST_ARCH}" >> auto-docker-manifest.yaml
@@ -29,7 +29,7 @@ echo "DEBUG: Begin Cycle ${DEST_BUILD_ARCH}"
     # Set armhf
     elif [ ${DEST_BUILD_ARCH} == "arm32v7" ]; then
         DEST_ARCH="arm"
-        DOCKERFILE_PREFIX="armhf."
+        DOCKERFILE="hooks/armhf.Dockerfile"
         echo "  - image: ${DOCKER_REPO}:${DOCKER_TAG}-${DEST_BUILD_ARCH}" >> auto-docker-manifest.yaml
         echo "    platform:" >> auto-docker-manifest.yaml
         echo "      architecture: ${DEST_ARCH}" >> auto-docker-manifest.yaml
@@ -39,7 +39,7 @@ echo "DEBUG: Begin Cycle ${DEST_BUILD_ARCH}"
     # Set arm64
     elif [ ${DEST_BUILD_ARCH} == "arm64v8" ]; then
         DEST_ARCH="arm64"
-        DOCKERFILE_PREFIX="aarch64."
+        DOCKERFILE="hooks/aarch64.Dockerfile"
         echo "  - image: ${DOCKER_REPO}:${DOCKER_TAG}-${DEST_BUILD_ARCH}" >> auto-docker-manifest.yaml
         echo "    platform:" >> auto-docker-manifest.yaml
         echo "      architecture: ${DEST_ARCH}" >> auto-docker-manifest.yaml
@@ -54,7 +54,6 @@ echo "DEBUG: Begin Cycle ${DEST_BUILD_ARCH}"
 
     echo "Begin Building"
     SRC_BUILD_TAG=${SRC_TAG}-${DEST_BUILD_ARCH}
-    DOCKERFILE="${DOCKERFILE_PREFIX}Dockerfile"
     # Build the docker image
     docker build \
         --compress \
@@ -74,7 +73,7 @@ echo "DEBUG: Begin Cycle ${DEST_BUILD_ARCH}"
         --build-arg ROS_DISTRO="${ROS_DISTRO}" \
         --build-arg SRC_REPO="${SRC_REPO}" \
         --build-arg SRC_TAG="${SRC_BUILD_TAG}" \
-        --build-arg SRC_NAME="${SRC_NAME}" \
+        --build-arg SRC_NAME="${DEST_BUILD_ARCH}" \
         --tag "${DOCKER_REPO}:${DOCKER_TAG}-${DEST_BUILD_ARCH}" \
         .
     
