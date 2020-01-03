@@ -19,12 +19,11 @@ RUN chmod +x /bin/manifest-tool \
     && groupadd --gid 1000 cuisine \
     && useradd --uid 1000 --gid 1000 -m cuisine \
     && mkdir -p /home/cuisine/.vscode-server /home/cuisine/.vscode-server-insiders \
-    && chown 1000:1000 /home/cuisine/.vscode-server* \
-    # Update Packages
-    && apt-get update \
+    && chown 1000:1000 /home/cuisine/.vscode-server*
+
+# Update Packages
+RUN apt-get update \
     && apt-get upgrade -y -q \
-    && echo ${TAG} \
-    && echo $TAG \
     && apt-get install -y -q \
         sudo \
         # Robot
