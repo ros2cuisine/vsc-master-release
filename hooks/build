@@ -20,7 +20,7 @@ echo "DEBUG: Begin Cycle ${DEST_BUILD_ARCH}"
     # Set AMD64
     if [ ${DEST_BUILD_ARCH} == "amd64" ]; then
         DEST_ARCH=${DEST_BUILD_ARCH}
-        DOCKERFile="hooks/amd64.Dockerfile"
+        DOCKERFILE="hooks/amd64.Dockerfile"
         echo "  - image: ${DOCKER_REPO}:${DOCKER_TAG}-${DEST_BUILD_ARCH}" >> auto-docker-manifest.yaml
         echo "    platform:" >> auto-docker-manifest.yaml
         echo "      architecture: ${DEST_ARCH}" >> auto-docker-manifest.yaml
@@ -53,7 +53,6 @@ echo "DEBUG: Begin Cycle ${DEST_BUILD_ARCH}"
     fi
 
     echo "Begin Building"
-    SRC_BUILD_TAG=${SRC_TAG}-${DEST_BUILD_ARCH}
     # Build the docker image
     docker build \
         --compress \
@@ -72,8 +71,8 @@ echo "DEBUG: Begin Cycle ${DEST_BUILD_ARCH}"
         --file "${DOCKERFILE}" \
         --build-arg ROS_DISTRO="${ROS_DISTRO}" \
         --build-arg SRC_REPO="${SRC_REPO}" \
-        --build-arg SRC_TAG="${SRC_BUILD_TAG}" \
-        --build-arg SRC_NAME="${DEST_BUILD_ARCH}" \
+        --build-arg SRC_TAG="${SRC_TAG}" \
+        --build-arg SRC_NAME="${SRC_NAME}" \
         --tag "${DOCKER_REPO}:${DOCKER_TAG}-${DEST_BUILD_ARCH}" \
         .
     
