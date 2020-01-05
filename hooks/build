@@ -71,7 +71,7 @@ echo "DEBUG: Begin Cycle ${DEST_BUILD_ARCH}"
         --file "${DOCKERFILE}" \
         --build-arg ROS_DISTRO="${ROS_DISTRO}" \
         --build-arg SRC_REPO="${SRC_REPO}" \
-        --build-arg SRC_TAG="${SRC_TAG}" \
+        --build-arg SRC_TAG="${SRC_TAG}-${DEST_BUILD_ARCH}" \
         --build-arg SRC_NAME="${SRC_NAME}" \
         --tag "${DOCKER_REPO}:${DOCKER_TAG}-${DEST_BUILD_ARCH}" \
         .
