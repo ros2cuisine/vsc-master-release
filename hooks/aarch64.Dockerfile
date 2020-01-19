@@ -38,7 +38,6 @@ RUN chmod +x /bin/manifest-tool \
 
 # Update Packages
 RUN apt-get update \
-    && apt-get upgrade -y -q \
     && apt-get install -y -q \
         sudo \
         # Robot
@@ -72,7 +71,10 @@ RUN apt-get update \
         # Install Doxygen
         doxygen \
         # Lint
-        exuberant-ctags
+        exuberant-ctags \
+        python-pip \
+    # Preparing the docker config folder
+    && mkdir -p ~/.docker
 
 # Configure sudo
 RUN echo cuisine ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/cuisine \
@@ -91,16 +93,19 @@ RUN echo cuisine ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/cuisine \
         doc8 \
         colcon-ros-bundle \
         faas-cli \
+    # Sphinx
+    && pip install -U \
+        doc8 \
+        sphinx \
+        sphinx-autobuild \
     && rm -rf /var/lib/apt/lists/* \
     # Prepare docker config folder
     && mkdir -p ~/.docker
 
+# faas cli Setup
+RUN cd \
+    && curl -sSL https://cli.openfaas.com | sh \
+    && sudo mv faas-cli /usr/local/bin/faas
+
 # Setting User
 USER cuisine
-
-#ADD https://raw.githubusercontent.com/ros2cuisine/vsc-master-release/master/eloquent-docker.config.json ~/.docker/config.json
-
-ENTRYPOINT [ "/ros_entrypoint.sh" ]
-
-# Setup CMD
-CMD ["bash" "-c" "/ros_entrypoint.sh"]
