@@ -70,7 +70,7 @@ RUN apt-get update \
         # Install Doxygen
         doxygen \
         pyhton-pip \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
     # Prepare docker config folder
     && mkdir -p ~/.docker
 
