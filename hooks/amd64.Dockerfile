@@ -101,11 +101,6 @@ RUN pip3 install -U \
     # Preparing the docker config folder
     && mkdir -p ~/.docker
 
-# faas cli Setup
-RUN cd \
-    && curl -sSL https://cli.openfaas.com | sh \
-    && sudo mv faas-cli /usr/local/bin/faas
-
 # Setting User
 USER cuisine
 

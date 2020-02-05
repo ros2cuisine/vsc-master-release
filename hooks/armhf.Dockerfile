@@ -100,10 +100,5 @@ RUN echo cuisine ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/cuisine \
     # Prepare docker config folder
     && mkdir -p ~/.docker
 
-# faas cli Setup
-RUN cd \
-    && curl -sSL https://cli.openfaas.com | sh \
-    && sudo mv faas-cli /usr/local/bin/faas
-
 # Setting User
 USER $USERNAME
