@@ -69,7 +69,7 @@ RUN apt-get update \
         lsb-release \
         # Install Doxygen
         doxygen \
-        pyhton-pip \
+        # pyhton-pip \
     && rm -rf /var/lib/apt/lists/* \
     # Prepare docker config folder
     && mkdir -p ~/.docker
