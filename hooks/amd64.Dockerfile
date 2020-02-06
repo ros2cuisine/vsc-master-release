@@ -61,7 +61,7 @@ RUN apt-get update \
         exuberant-ctags \
         # for sphinx
         python-pip \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
     # Prepare docker config folder
     && mkdir -p ~/.docker
 
