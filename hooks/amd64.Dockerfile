@@ -60,7 +60,7 @@ RUN apt-get update \
         # Lint
         exuberant-ctags \
         # for sphinx
-        python-pip \
+        python3-pip \
     && rm -rf /var/lib/apt/lists/* \
     # Prepare docker config folder
     && mkdir -p ~/.docker
@@ -93,7 +93,7 @@ RUN pip3 install -U \
         colcon-ros-bundle \
         faas-cli \
     # Sphinx
-    && pip install -U \
+    && pip3 install -U \
         doc8 \
         sphinx \
         sphinx-autobuild \

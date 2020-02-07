@@ -69,7 +69,7 @@ RUN apt-get update \
         lsb-release \
         # Install Doxygen
         doxygen \
-        # pyhton-pip \
+        pyhton3-pip \
     && rm -rf /var/lib/apt/lists/* \
     # Prepare docker config folder
     && mkdir -p ~/.docker
@@ -92,7 +92,7 @@ RUN echo cuisine ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/cuisine \
         colcon-ros-bundle \
         faas-cli \
     # Sphinx
-    && pip install -U \
+    && pip3 install -U \
         doc8 \
         sphinx \
         sphinx-autobuild \
