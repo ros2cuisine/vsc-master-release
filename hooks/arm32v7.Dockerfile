@@ -72,9 +72,10 @@ RUN apt-get update \
         doxygen \
         pyhton3-dev \
     && rm -rf /var/lib/apt/lists/* \
+    # Install pip3 manually because package python3-pip can not be found from apt
     && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
     && python3 get-pip.py \
-    && rm get-pip.py
+    && rm get-pip.py \
     # Prepare docker config folder
     && mkdir -p ~/.docker
 
