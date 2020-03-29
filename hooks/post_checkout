@@ -1,28 +1,14 @@
 #!/bin/bash
 
-# Cycle trough the the arches
-for DEST_BUILD_ARCH in ${DEST_ARCHES}
-do
-    if [ ${DEST_BUILD_ARCH} == "amd64" ]; then
-        echo 'qemu-user-static: Download not required for amd64'
-        continue
-    elif [ ${DEST_BUILD_ARCH} == "arm32v7" ]; then
-        QEMU_USER_STATIC_ARCH="arm"
-    elif [ ${DEST_BUILD_ARCH} == "arm64v8" ]; then
-        QEMU_USER_STATIC_ARCH="aarch64"
-    else 
-        echo "DEBUG: DEST_BUILD_ARCH not referenced"
-        exit 1
-    fi
-    
-    QEMU_USER_STATIC_DOWNLOAD_URL="https://github.com/multiarch/qemu-user-static/releases/download"
-    QEMU_USER_STATIC_LATEST_TAG=$(curl -s https://api.github.com/repos/multiarch/qemu-user-static/tags \
-        | grep 'name.*v[0-9]' \
-        | head -n 1 \
-        | cut -d '"' -f 4)
+# https://github.com/ichbestimmtnicht/docker-autobuild-release
+# Template created 2020 by Ludwig Werner Döhnert
+# This work is licensed under the Creative Commons Attribution 4.0 International License.
+# To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/.
 
-    curl -SL "${QEMU_USER_STATIC_DOWNLOAD_URL}/${QEMU_USER_STATIC_LATEST_TAG}/x86_64_qemu-${QEMU_USER_STATIC_ARCH}-static.tar.gz" \
-        | tar xzv
-done
+apt-get update && apt-get install wget bash -y -q
+
+wget https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/v0.0.1/hooks/post_checkout
+
+bash post_checkout
 
 exit 0
