@@ -18,6 +18,7 @@ ARG SRC_TAG
 
 # Pull the image
 FROM ${SRC_NAME}/${SRC_REPO}:${SRC_TAG} as bundle
+
 COPY --from=qemu qemu-arm-static /usr/bin
 
 ARG ROS_DISTRO
@@ -69,8 +70,11 @@ RUN apt-get update \
         lsb-release \
         # Install Doxygen
         doxygen \
-        pyhton3-pip \
+        pyhton3-dev \
     && rm -rf /var/lib/apt/lists/* \
+    && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
+    && python3 get-pip.py \
+    && rm get-pip.py
     # Prepare docker config folder
     && mkdir -p ~/.docker
 

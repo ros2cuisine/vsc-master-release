@@ -54,7 +54,6 @@ DEST_HUB="index.docker.io"
 # use as many as you like
 # BUILD_ARG_
 BUILD_ARGS=true # Set to false to disable build-arg's
-BUILD_ARG_SRC_HUB="index.docker.io"
 BUILD_ARG_SRC_NAME="ros2cuisine"
 BUILD_ARG_SRC_REPO="builder"
 BUILD_ARG_SRC_TAG="latest"
