@@ -42,11 +42,7 @@ RUN apt-get update \
         sudo \
         # Robot
         ros-$ROS_DISTRO-urdf \
-        ros-$ROS_DISTRO-robot-state-publisher \
-        # Messages
-        ros-$ROS_DISTRO-gazebo-msgs \
         # Moved from Dev Setup for faster tests
-        ros-$ROS_DISTRO-desktop \
         gazebo9 \
         nano \
         # Doxygen Requirments
@@ -55,8 +51,6 @@ RUN apt-get update \
         # Releasing
         python-catkin-pkg \
         python-bloom \
-        # ROS Devs
-        ros-${ROS_DISTRO}-rosidl-default-generators \
         # Key Handling
         wget \
         curl \
