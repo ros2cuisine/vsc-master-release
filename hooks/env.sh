@@ -57,7 +57,7 @@ BUILD_ARGS=true # Set to false to disable build-arg's
 BUILD_ARG_SRC_NAME="ros2cuisine"
 BUILD_ARG_SRC_REPO="builder"
 BUILD_ARG_SRC_TAG="latest"
-BUILD_ARG_ROS_DISTRO="eloquent"
+BUILD_ARG_ROS_DISTRO="foxy"
 
 # LABEL_ only: Use a double underscore __ for an hyphen -
 # LABEL_

@@ -57,12 +57,6 @@ RUN apt-get update \
         python-bloom \
         # ROS Devs
         ros-${ROS_DISTRO}-rosidl-default-generators \
-        # Maybe outdated and not used anymoore
-        ros-${ROS_DISTRO}-ament-cmake* \
-        # Colcon Ros Bundle
-        python3-apt \
-        # Installing Docker Compose
-        docker-compose \
         # Key Handling
         wget \
         curl \
