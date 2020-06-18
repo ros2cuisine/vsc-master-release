@@ -48,7 +48,6 @@ RUN apt-get update \
         flex \
         # Releasing
         python-catkin-pkg \
-        python3-bloom \
         # Key Handling
         wget \
         curl \
