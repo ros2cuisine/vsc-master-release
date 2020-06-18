@@ -40,8 +40,6 @@ RUN chmod +x /bin/manifest-tool \
 RUN apt-get update \
     && apt-get install -y -q \
         sudo \
-        # Robot
-        ros-$ROS_DISTRO-urdf \
         # Moved from Dev Setup for faster tests
         gazebo9 \
         nano \
@@ -50,7 +48,7 @@ RUN apt-get update \
         flex \
         # Releasing
         python-catkin-pkg \
-        python-bloom \
+        python3-bloom \
         # Key Handling
         wget \
         curl \
@@ -58,7 +56,7 @@ RUN apt-get update \
         lsb-release \
         # Install Doxygen
         doxygen \
-        pyhton3-dev \
+        python3-pip \
     && rm -rf /var/lib/apt/lists/* \
     # Install pip3 manually because package python3-pip can not be found from apt
     && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \

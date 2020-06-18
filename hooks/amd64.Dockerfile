@@ -33,7 +33,7 @@ RUN apt-get update \
         flex \
         # Releasing
         python-catkin-pkg \
-        python-bloom \
+        python3-bloom \
         # git
         git-all \
         # Key Handling
