@@ -3,7 +3,6 @@
 # https://gitlab.com/ros2cuisine/templates/vsc-master/tree/master/hooks/
 
 # setup environment variables (ARG for settings can be changed at buildtime with --build-arg <varname>=<value>
-ARG ROS_DISTRO
 ARG SRC_NAME
 ARG SRC_REPO
 ARG SRC_TAG
@@ -11,10 +10,6 @@ ARG SRC_TAG
 # Pull the image
 FROM ${SRC_NAME}/${SRC_REPO}:${SRC_TAG} as bundle
 
-ARG ROS_DISTRO
-
-ENV ROS_DISTRO ${ROS_DISTRO}
-ENV DEBIAN_FRONTEND noninteractive
 
 ADD https://github.com/estesp/manifest-tool/releases/download/v1.0.0/manifest-tool-linux-amd64 /bin/manifest-tool
 
@@ -23,10 +18,9 @@ RUN chmod +x /bin/manifest-tool \
     && groupadd --gid 1000 cuisine \
     && useradd --uid 1000 --gid 1000 -m cuisine \
     && mkdir -p /home/cuisine/.vscode-server /home/cuisine/.vscode-server-insiders \
-    && chown 1000:1000 /home/cuisine/.vscode-server*
-
-# Update Packages
-RUN apt-get update \
+    && chown 1000:1000 /home/cuisine/.vscode-server* \
+    # Update Packages
+    && apt-get update \
     && apt-get install -y -q \
         sudo \
         # Robot
@@ -65,12 +59,11 @@ RUN apt-get update \
         exuberant-ctags \
         # for sphinx
         python-pip \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
     # Prepare docker config folder
-    && mkdir -p ~/.docker
-
-# Configure sudo
-RUN echo cuisine ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/cuisine \
+    && mkdir -p ~/.docker \
+    # Configure sudo
+    && echo cuisine ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/cuisine \
     && chmod 0440 /etc/sudoers.d/cuisine \
     # Install keys
     && curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add - \
@@ -80,10 +73,9 @@ RUN echo cuisine ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/cuisine \
     && apt-get upgrade -y -q \
     && apt-get autoremove --purge -y -q \
     && apt-get autoclean -y -q \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Python3 Packages
-RUN pip3 install -U \
+    && rm -rf /var/lib/apt/lists/* \
+    # Install Python3 Packages
+    && pip3 install -U \
         # Lint
         pylint \
         # Documentation
@@ -103,10 +95,9 @@ RUN pip3 install -U \
         sphinx-autobuild \
     && rm -rf /var/lib/apt/lists/* \
     # Preparing the docker config folder
-    && mkdir -p ~/.docker
-
-# faas cli Setup
-RUN cd \
+    && mkdir -p ~/.docker \
+    # faas cli Setup
+    && cd \
     && curl -sSL https://cli.openfaas.com | sh \
     && sudo mv faas-cli /usr/local/bin/faas
 

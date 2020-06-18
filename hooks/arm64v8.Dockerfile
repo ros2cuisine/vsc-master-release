@@ -1,5 +1,4 @@
 # Set environment variables
-ARG ROS_DISTRO
 ARG SRC_NAME
 ARG SRC_REPO
 ARG SRC_TAG
@@ -21,11 +20,7 @@ FROM ${SRC_NAME}/${SRC_REPO}:${SRC_TAG} as bundle
 
 COPY --from=qemu qemu-aarch64-static /usr/bin
 
-ARG ROS_DISTRO
-
 # These are avaivable in the build image
-ENV ROS_DISTRO ${ROS_DISTRO}
-ENV DEBIAN_FRONTEND noninteractive
 
 ADD https://github.com/estesp/manifest-tool/releases/download/v1.0.0/manifest-tool-linux-arm64 /bin/manifest-tool
 
@@ -34,10 +29,9 @@ RUN chmod +x /bin/manifest-tool \
     && groupadd --gid 1000 cuisine \
     && useradd --uid 1000 --gid 1000 -m cuisine \
     && mkdir -p /home/cuisine/.vscode-server /home/cuisine/.vscode-server-insiders \
-    && chown 1000:1000 /home/cuisine/.vscode-server*
-
-# Update Packages
-RUN apt-get update \
+    && chown 1000:1000 /home/cuisine/.vscode-server* \
+    # Update Packages
+    && apt-get update \
     && apt-get install -y -q \
         sudo \
         gazebo9 \
@@ -58,10 +52,9 @@ RUN apt-get update \
         exuberant-ctags \
         python3-pip \
     # Preparing the docker config folder
-    && mkdir -p ~/.docker
-
-# Configure sudo
-RUN echo cuisine ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/cuisine \
+    && mkdir -p ~/.docker \
+    # Configure sudo
+    && echo cuisine ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/cuisine \
     && chmod 0440 /etc/sudoers.d/cuisine \
     # Install Python3 Packages
     && pip3 install -U \
