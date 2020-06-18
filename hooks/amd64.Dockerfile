@@ -18,14 +18,12 @@ RUN chmod +x /bin/manifest-tool \
     && apt-get update \
     && apt-get install -y -q \
         sudo \
-        # Moved from Dev Setup for faster tests
-        gazebo9 \
         nano \
         # Doxygen Requirments
         bison \
         flex \
         # Releasing
-        python-catkin-pkg \
+        python3-catkin-pkg \
         # git
         git-all \
         # Key Handling
@@ -66,11 +64,6 @@ RUN chmod +x /bin/manifest-tool \
         doc8 \
         colcon-ros-bundle \
         faas-cli \
-    # Sphinx
-    && pip3 install -U \
-        doc8 \
-        sphinx \
-        sphinx-autobuild \
     && rm -rf /var/lib/apt/lists/* \
     # Preparing the docker config folder
     && mkdir -p ~/.docker

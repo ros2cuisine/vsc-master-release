@@ -23,29 +23,12 @@ RUN chmod +x /bin/manifest-tool \
     && apt-get update \
     && apt-get install -y -q \
         sudo \
-        # Robot
-        ros-${ROS_DISTRO}-urdf \
-        ros-${ROS_DISTRO}-robot-state-publisher \
-        # Messages
-        ros-${ROS_DISTRO}-gazebo-msgs \
-        # Moved from Dev Setup for faster tests
-        ros-${ROS_DISTRO}-desktop \
-        gazebo9 \
         nano \
         # Doxygen Requirments
         bison \
         flex \
         # Releasing
-        python-catkin-pkg \
-        python-bloom \
-        # ROS Devs
-        ros-${ROS_DISTRO}-rosidl-default-generators \
-        # Maybe outdated and not used anymoore
-        ros-${ROS_DISTRO}-ament-cmake* \
-        # Colcon Ros Bundle
-        python3-apt \
-        # Installing Docker Compose
-        docker-compose \
+        python3-catkin-pkg \
         # git
         git-all \
         # Key Handling
@@ -58,7 +41,7 @@ RUN chmod +x /bin/manifest-tool \
         # Lint
         exuberant-ctags \
         # for sphinx
-        python-pip \
+        python3-pip \
     && rm -rf /var/lib/apt/lists/* \
     # Prepare docker config folder
     && mkdir -p ~/.docker \
@@ -69,11 +52,9 @@ RUN chmod +x /bin/manifest-tool \
     && curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add - \
     && wget http://packages.osrfoundation.org/gazebo.key \
     && apt-key add gazebo.key \
-    && apt-get update -q \
     && apt-get upgrade -y -q \
     && apt-get autoremove --purge -y -q \
     && apt-get autoclean -y -q \
-    && rm -rf /var/lib/apt/lists/* \
     # Install Python3 Packages
     && pip3 install -U \
         # Lint
@@ -88,18 +69,12 @@ RUN chmod +x /bin/manifest-tool \
         doc8 \
         colcon-ros-bundle \
         faas-cli \
-    # Sphinx
-    && pip install -U \
-        doc8 \
-        sphinx \
-        sphinx-autobuild \
     && rm -rf /var/lib/apt/lists/* \
     # Preparing the docker config folder
-    && mkdir -p ~/.docker \
-    # faas cli Setup
-    && cd \
-    && curl -sSL https://cli.openfaas.com | sh \
-    && sudo mv faas-cli /usr/local/bin/faas
+    && mkdir -p ~/.docker
 
 # Setting User
 USER cuisine
+
+# Instructions to a child image build
+#ONBUILD RUN rm -rf /var/lib/apt/lists/*
