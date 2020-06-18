@@ -23,11 +23,6 @@ COPY --from=qemu qemu-arm-static /usr/bin
 ADD https://github.com/estesp/manifest-tool/releases/download/v1.0.0/manifest-tool-linux-armv7 /bin/manifest-tool
 
 RUN chmod +x /bin/manifest-tool \
-    # Setting User
-    && groupadd --gid 1000 cuisine \
-    && useradd --uid 1000 --gid 1000 -m cuisine \
-    && mkdir -p /home/cuisine/.vscode-server /home/cuisine/.vscode-server-insiders \
-    && chown 1000:1000 /home/cuisine/.vscode-server* \
     # Update Packages
     && apt-get update \
     && apt-get install -y -q \
@@ -47,15 +42,6 @@ RUN chmod +x /bin/manifest-tool \
         doxygen \
         python3-pip \
     && rm -rf /var/lib/apt/lists/* \
-    # Install pip3 manually because package python3-pip can not be found from apt
-    && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
-    && python3 get-pip.py \
-    && rm get-pip.py \
-    # Prepare docker config folder
-    && mkdir -p ~/.docker \
-    # Configure sudo
-    && echo cuisine ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/cuisine \
-    && chmod 0440 /etc/sudoers.d/cuisine \
     # Install Python3 Packages
     && pip3 install -U \
         # Lint
