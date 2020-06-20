@@ -22,11 +22,8 @@ COPY --from=qemu qemu-aarch64-static /usr/bin
 
 # These are avaivable in the build image
 
-ADD https://github.com/estesp/manifest-tool/releases/download/v1.0.0/manifest-tool-linux-arm64 /bin/manifest-tool
-
-RUN chmod +x /bin/manifest-tool \
-    # Update Packages
-    && apt-get update \
+# Update Package Info
+RUN apt-get update \
     && apt-get install -y -q \
         sudo \
         nano \
@@ -45,6 +42,8 @@ RUN chmod +x /bin/manifest-tool \
         # Lint
         exuberant-ctags \
         python3-pip \
+        # ROS2
+        ros-${ROS_DISTRO}-desktop \
     # Install Python3 Packages
     && pip3 install -U \
         # Lint
@@ -57,8 +56,6 @@ RUN chmod +x /bin/manifest-tool \
         sphinx-autobuild \
         sphinx_rtd_theme \
         doc8 \
-        colcon-ros-bundle \
-        faas-cli \
     && rm -rf /var/lib/apt/lists/* \
     # Prepare docker config folder
     && mkdir -p ~/.docker

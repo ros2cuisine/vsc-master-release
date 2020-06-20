@@ -20,11 +20,8 @@ FROM ${SRC_NAME}/${SRC_REPO}:${SRC_TAG} as bundle
 
 COPY --from=qemu qemu-arm-static /usr/bin
 
-ADD https://github.com/estesp/manifest-tool/releases/download/v1.0.0/manifest-tool-linux-armv7 /bin/manifest-tool
-
-RUN chmod +x /bin/manifest-tool \
-    # Update Packages
-    && apt-get update \
+# Update Package Info
+RUN apt-get update \
     && apt-get install -y -q \
         sudo \
         nano \
@@ -41,6 +38,8 @@ RUN chmod +x /bin/manifest-tool \
         # Install Doxygen
         doxygen \
         python3-pip \
+        # ROS2 
+        ros-${ROS_DISTRO}-desktop \
     && rm -rf /var/lib/apt/lists/* \
     # Install Python3 Packages
     && pip3 install -U \
@@ -54,8 +53,6 @@ RUN chmod +x /bin/manifest-tool \
         sphinx-autobuild \
         sphinx_rtd_theme \
         doc8 \
-        colcon-ros-bundle \
-        faas-cli \
     && rm -rf /var/lib/apt/lists/* \
     # Prepare docker config folder
     && mkdir -p ~/.docker
